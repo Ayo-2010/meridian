@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian — Meeting Planner Across Time Zones</title>
+<meta name="description" content="A DST-aware world clock and meeting planner with a 24-hour overlap timeline across eight cities.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <div class="brand">
+      <span class="stamp">M</span>
+      <div>
+        <strong>Meridian</strong>
+        <span>World clock &amp; meeting planner</span>
+      </div>
+    </div>
+    <div class="now">
+      <span id="home-now">00:00:00</span>
+      <span id="home-label">Warsaw · Europe/Warsaw</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div class="intro-copy">
+        <p class="eyebrow">Find the overlap</p>
+        <h1>One hour.<br><em>Everywhere.</em></h1>
+        <p class="lede">Choose a date and a home city. The timeline recalculates every row with real time-zone rules, including daylight saving changes.</p>
+      </div>
+      <div class="meeting-card">
+        <p class="card-label">Selected meeting</p>
+        <div class="meeting-time" id="meeting-time">14:00</div>
+        <div class="meeting-date" id="meeting-date">Monday, 20 October 2026</div>
+        <div class="meeting-meta">
+          <span id="meeting-utc">12:00 UTC</span>
+          <span id="meeting-day">Same day in 8 cities</span>
+        </div>
+        <div class="meeting-controls">
+          <button id="minus-hour" type="button" aria-label="One hour earlier">−</button>
+          <input type="range" id="hour-range" min="0" max="23" step="1" value="14" aria-label="Meeting hour in home time zone">
+          <button id="plus-hour" type="button" aria-label="One hour later">+</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <aside class="city-panel">
+        <div class="panel-heading">
+          <span>Cities</span>
+          <span id="city-count">08</span>
+        </div>
+        <div id="city-list" class="city-list"></div>
+        <div class="add-city">
+          <label for="city-picker">Add a city</label>
+          <div class="add-row">
+            <select id="city-picker"></select>
+            <button id="add-city" type="button">Add</button>
+          </div>
+        </div>
+        <div class="home-picker">
+          <label for="home-select">Home time zone</label>
+          <select id="home-select"></select>
+        </div>
+        <p class="panel-note">Working hours are highlighted from 09:00 to 17:00 local time. Click any timeline cell to move the meeting.</p>
+      </aside>
+
+      <section class="planner-panel">
+        <div class="planner-top">
+          <div class="date-nav">
+            <button id="prev-day" type="button" aria-label="Previous day">←</button>
+            <label class="date-field">
+              <span>Meeting date</span>
+              <input type="date" id="date-input">
+            </label>
+            <button id="next-day" type="button" aria-label="Next day">→</button>
+          </div>
+          <div class="overlap" id="overlap"></div>
+        </div>
+
+        <div class="timeline-shell">
+          <div class="timeline" id="timeline">
+            <div class="timeline-head">
+              <div class="head-city">Local time</div>
+              <div class="hours" id="hour-head"></div>
+            </div>
+            <div id="rows"></div>
+          </div>
+        </div>
+
+        <div class="timeline-foot">
+          <span class="key"><i class="swatch work"></i>Working hours</span>
+          <span class="key"><i class="swatch awake"></i>Awake</span>
+          <span class="key"><i class="swatch sleep"></i>Outside hours</span>
+          <span class="key"><i class="swatch selected"></i>Selected</span>
+          <span class="dst-note" id="dst-note">All times are location-aware</span>
+        </div>
+      </section>
+    </section>
+
+    <section class="overlap-board">
+      <div class="board-head">
+        <div>
+          <p class="eyebrow">Best hours</p>
+          <h2>When everyone is awake.</h2>
+        </div>
+        <p>Ranked by how many selected cities fall inside working hours, then awake hours, for this date.</p>
+      </div>
+      <div class="ranked" id="ranked"></div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Meridian / Time-zone rules via the browser Intl API</span>
+    <span id="year"></span>
+  </footer>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
